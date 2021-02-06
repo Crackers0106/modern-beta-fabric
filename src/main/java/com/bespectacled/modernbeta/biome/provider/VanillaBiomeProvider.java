@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.bespectacled.modernbeta.biome.settings.BiomeSettings;
+import com.bespectacled.modernbeta.biome.settings.VanillaBiomeSettings;
 import com.bespectacled.modernbeta.biome.vanilla.VanillaBiomeLayer;
 import com.bespectacled.modernbeta.biome.vanilla.VanillaOceanLayer;
 
@@ -20,7 +22,7 @@ public class VanillaBiomeProvider extends AbstractBiomeProvider {
     private final BiomeLayerSampler biomeSampler;
     private final BiomeLayerSampler oceanSampler;
     
-    public VanillaBiomeProvider(long seed) {
+    public VanillaBiomeProvider(long seed, BiomeSettings biomeSettings) {
         this.biomeSampler = VanillaBiomeLayer.build(seed, false, 4, -1);
         this.oceanSampler = VanillaOceanLayer.build(seed, false, 6, -1);
     }

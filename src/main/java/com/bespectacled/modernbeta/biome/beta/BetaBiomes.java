@@ -164,7 +164,6 @@ public class BetaBiomes {
         } else {
             return RAINFOREST_ID;
         }
-
     }
 
     private static Identifier getOceanBiome(float temp, float humid) {

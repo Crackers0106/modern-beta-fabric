@@ -4,6 +4,12 @@ import java.util.Optional;
 
 import com.bespectacled.modernbeta.biome.BiomeType;
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
+import com.bespectacled.modernbeta.biome.beta.BetaBiomes;
+import com.bespectacled.modernbeta.biome.classic.ClassicBiomes;
+import com.bespectacled.modernbeta.biome.settings.BetaBiomeSettings;
+import com.bespectacled.modernbeta.biome.settings.BiomeSettingsRegistry;
+import com.bespectacled.modernbeta.biome.settings.SingleBiomeSettings;
+import com.bespectacled.modernbeta.biome.settings.VanillaBiomeSettings;
 import com.bespectacled.modernbeta.gui.IndevCustomizeLevelScreen;
 import com.bespectacled.modernbeta.gui.InfCustomizeLevelScreen;
 import com.bespectacled.modernbeta.gui.InfdevOldCustomizeLevelScreen;
@@ -14,29 +20,38 @@ import net.minecraft.client.world.GeneratorType;
 import net.minecraft.client.world.GeneratorType.ScreenProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public class OldGeneratorType {
 
     private static final GeneratorType BETA;
-    private static final GeneratorType SKYLANDS;
+    
+    //private static final GeneratorType SKYLANDS;
     private static final GeneratorType ALPHA;
+    /*
     private static final GeneratorType INFDEV;
     private static final GeneratorType INFDEV_OLD;
     private static final GeneratorType INDEV;
     private static final GeneratorType NETHER;
     private static final GeneratorType FLAT;
+    */
     
     public static void register() {
         register(BETA);
-        register(SKYLANDS);
+        
+        //register(SKYLANDS);
         register(ALPHA);
+        
+        /*
         register(INFDEV);
         register(INFDEV_OLD);
         register(INDEV);
         //register(NETHER);
         //register(FLAT);
+         * 
+         */
     }
     
     private static void register(GeneratorType type) {
@@ -47,24 +62,26 @@ public class OldGeneratorType {
         BETA = new GeneratorType("beta") {
             @Override
             protected ChunkGenerator getChunkGenerator(Registry<Biome> biomes, Registry<ChunkGeneratorSettings> genSettings, long seed) {
-                return new OldChunkGenerator(new OldBiomeSource(seed, biomes, OldGeneratorSettings.BETA_SETTINGS.providerSettings), seed, OldGeneratorSettings.BETA_SETTINGS);
+                return new OldChunkGenerator(new OldBiomeSource(seed, biomes, BiomeType.BETA.getName(), BetaBiomeSettings.createDefaultSettings(biomes)), seed, OldGeneratorSettings.BETA_SETTINGS);
             }
         };
         
+        /*
         SKYLANDS = new GeneratorType("skylands") {
             @Override
             protected ChunkGenerator getChunkGenerator(Registry<Biome> biomes, Registry<ChunkGeneratorSettings> genSettings, long seed) {
                 return new OldChunkGenerator(new OldBiomeSource(seed, biomes, OldGeneratorSettings.SKYLANDS_SETTINGS.providerSettings), seed, OldGeneratorSettings.SKYLANDS_SETTINGS);
             }
         };
+        */
         
         ALPHA = new GeneratorType("alpha") {
             @Override
             protected ChunkGenerator getChunkGenerator(Registry<Biome> biomes, Registry<ChunkGeneratorSettings> genSettings, long seed) {
-                return new OldChunkGenerator(new OldBiomeSource(seed, biomes, OldGeneratorSettings.ALPHA_SETTINGS.providerSettings), seed, OldGeneratorSettings.ALPHA_SETTINGS);
+                return new OldChunkGenerator(new OldBiomeSource(seed, biomes, BiomeType.CLASSIC.getName(), SingleBiomeSettings.createSettings(biomes, BiomeKeys.FOREST.getValue())), seed, OldGeneratorSettings.ALPHA_SETTINGS);
             }
         };
-        
+        /*
         INFDEV = new GeneratorType("infdev") {
             @Override
             protected ChunkGenerator getChunkGenerator(Registry<Biome> biomes, Registry<ChunkGeneratorSettings> genSettings, long seed) {
@@ -72,7 +89,7 @@ public class OldGeneratorType {
             }
         };
         
-        INFDEV_OLD = new GeneratorType("infdev_old") {
+        INFDEV_OLD = new GeneratorType("infdev_old") {e
             @Override
             protected ChunkGenerator getChunkGenerator(Registry<Biome> biomes, Registry<ChunkGeneratorSettings> genSettings, long seed) {
                 return new OldChunkGenerator(new OldBiomeSource(seed, biomes, OldGeneratorSettings.INFDEV_SETTINGS.providerSettings), seed, OldGeneratorSettings.INFDEV_SETTINGS);
@@ -100,6 +117,7 @@ public class OldGeneratorType {
                 return new OldChunkGenerator(new OldBiomeSource(seed, biomes, OldGeneratorSettings.FLAT_SETTINGS.providerSettings), seed, OldGeneratorSettings.FLAT_SETTINGS);
             }
         };
+        */
         
         
         MixinGeneratorTypeAccessor.setScreenProviders(
@@ -110,6 +128,7 @@ public class OldGeneratorType {
                         return new InfCustomizeLevelScreen(createWorldScreen, OldGeneratorSettings.BETA_SETTINGS, "createWorld.customize.beta.title", BiomeType.BETA, true);
                     }
                 )
+                /*
                 .put(
                     Optional.<GeneratorType>of(SKYLANDS), (createWorldScreen, generatorSettings) -> {
                         return new InfCustomizeLevelScreen(createWorldScreen, OldGeneratorSettings.SKYLANDS_SETTINGS, "createWorld.customize.skylands.title", BiomeType.SKY, false);
@@ -145,6 +164,7 @@ public class OldGeneratorType {
                         return new InfCustomizeLevelScreen(createWorldScreen, OldGeneratorSettings.BETA_SETTINGS, "createWorld.customize.beta.title", BiomeType.BETA, false);
                     }
                 )
+                */
                 .build()
         );
     }

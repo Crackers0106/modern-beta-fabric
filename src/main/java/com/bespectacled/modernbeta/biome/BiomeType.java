@@ -1,25 +1,35 @@
 package com.bespectacled.modernbeta.biome;
 
+import java.util.function.BiFunction;
+
+import com.bespectacled.modernbeta.biome.provider.*;
+import com.bespectacled.modernbeta.biome.settings.BiomeSettings;
+
 import net.minecraft.nbt.CompoundTag;
 
 public enum BiomeType {
-    BETA("beta"),
-    BETA_ICE_DESERT("beta_ice_desert"),
-    SKY("sky"),
-    CLASSIC("classic"),
-    WINTER("winter"),
-    PLUS("plus"),
-    VANILLA("vanilla");
+    BETA("beta", BetaBiomeProvider::new),
+    SKY("sky", SingleBiomeProvider::new),
+    CLASSIC("classic", SingleBiomeProvider::new),
+    WINTER("winter", SingleBiomeProvider::new),
+    PLUS("plus", PlusBiomeProvider::new),
+    VANILLA("vanilla", VanillaBiomeProvider::new);
     //NETHER("nether");
     
     private final String name;
+    private final BiFunction<Long, BiomeSettings, AbstractBiomeProvider> biomeProvider;
     
-    private BiomeType(String name) {
+    private BiomeType(String name, BiFunction<Long, BiomeSettings, AbstractBiomeProvider> biomeProvider) {
         this.name = name;
+        this.biomeProvider = biomeProvider;
     }
     
     public String getName() {
         return this.name;
+    }
+    
+    public AbstractBiomeProvider createBiomeProvider(long seed, BiomeSettings settings) {
+        return this.biomeProvider.apply(seed, settings);
     }
     
     public static BiomeType fromName(String name) {
