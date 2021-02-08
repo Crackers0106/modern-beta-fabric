@@ -3,7 +3,7 @@ package com.bespectacled.modernbeta.biome;
 import java.util.function.BiFunction;
 
 import com.bespectacled.modernbeta.biome.provider.*;
-import com.bespectacled.modernbeta.biome.settings.BiomeSettings;
+import com.bespectacled.modernbeta.biome.provider.settings.BiomeProviderSettings;
 
 import net.minecraft.nbt.CompoundTag;
 
@@ -17,9 +17,9 @@ public enum BiomeType {
     //NETHER("nether");
     
     private final String name;
-    private final BiFunction<Long, BiomeSettings, AbstractBiomeProvider> biomeProvider;
+    private final BiFunction<Long, BiomeProviderSettings, AbstractBiomeProvider> biomeProvider;
     
-    private BiomeType(String name, BiFunction<Long, BiomeSettings, AbstractBiomeProvider> biomeProvider) {
+    private BiomeType(String name, BiFunction<Long, BiomeProviderSettings, AbstractBiomeProvider> biomeProvider) {
         this.name = name;
         this.biomeProvider = biomeProvider;
     }
@@ -28,7 +28,7 @@ public enum BiomeType {
         return this.name;
     }
     
-    public AbstractBiomeProvider createBiomeProvider(long seed, BiomeSettings settings) {
+    public AbstractBiomeProvider createBiomeProvider(long seed, BiomeProviderSettings settings) {
         return this.biomeProvider.apply(seed, settings);
     }
     

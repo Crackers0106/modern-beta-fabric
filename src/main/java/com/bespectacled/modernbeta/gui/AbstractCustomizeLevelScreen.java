@@ -1,6 +1,7 @@
 package com.bespectacled.modernbeta.gui;
 
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
+
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ScreenTexts;
@@ -12,15 +13,15 @@ import net.minecraft.text.TranslatableText;
 
 public abstract class AbstractCustomizeLevelScreen extends Screen {
     private final CreateWorldScreen parent;
-    protected final OldGeneratorSettings generatorSettings;
+    protected final ChunkProviderSettings providerSettings;
     
     protected ButtonListWidget buttonList;
     
-    public AbstractCustomizeLevelScreen(CreateWorldScreen parent, OldGeneratorSettings generatorSettings, String title) {
+    public AbstractCustomizeLevelScreen(CreateWorldScreen parent, String title, ChunkProviderSettings providerSettings) {
         super(new TranslatableText(title));
         
         this.parent = parent;
-        this.generatorSettings = generatorSettings;
+        this.providerSettings = providerSettings;
     }
     
     @Override

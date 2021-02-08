@@ -9,7 +9,7 @@ import com.bespectacled.modernbeta.biome.indev.IndevUtil;
 import com.bespectacled.modernbeta.biome.indev.IndevUtil.IndevTheme;
 import com.bespectacled.modernbeta.biome.indev.IndevUtil.IndevType;
 import com.bespectacled.modernbeta.gen.GenUtil;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
 import com.bespectacled.modernbeta.noise.PerlinOctaveNoise;
 import com.bespectacled.modernbeta.noise.PerlinOctaveNoiseCombined;
 import com.bespectacled.modernbeta.util.BlockStates;
@@ -32,6 +32,7 @@ import net.minecraft.world.Heightmap.Type;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public class IndevChunkProvider extends AbstractChunkProvider {
     
@@ -72,10 +73,11 @@ public class IndevChunkProvider extends AbstractChunkProvider {
     
     private boolean pregenerated;
     
-    public IndevChunkProvider(long seed, OldGeneratorSettings settings) {
+    public IndevChunkProvider(long seed, ChunkGeneratorSettings generatorSettings, ChunkProviderSettings providerSettings) {
         //super(seed, settings);
-        super(seed, 0, 128, 64, 0, -10, 2, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, settings.providerSettings);
+        super(seed, 0, 128, 64, 0, -10, 2, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, providerSettings);
         
+        /*
         this.theme = this.providerSettings.contains("levelTheme") ? IndevTheme.fromName(this.providerSettings.getString("levelTheme")) : IndevTheme.NORMAL;
         this.type = this.providerSettings.contains("levelType") ? IndevType.fromName(this.providerSettings.getString("levelType")) : IndevType.ISLAND;
         this.fluidBlock = (this.theme == IndevTheme.HELL) ? BlockStates.LAVA : BlockStates.WATER;
@@ -84,6 +86,16 @@ public class IndevChunkProvider extends AbstractChunkProvider {
         this.length = this.providerSettings.contains("levelLength") ? this.providerSettings.getInt("levelLength") : 256;
         this.height = this.providerSettings.contains("levelHeight") ? this.providerSettings.getInt("levelHeight") : 128;
         this.caveRadius = this.providerSettings.contains("caveRadius") ? this.providerSettings.getFloat("caveRadius") : 1.0f;
+        */
+        
+        this.theme = IndevTheme.NORMAL;
+        this.type = IndevType.ISLAND;
+        this.fluidBlock = (this.theme == IndevTheme.HELL) ? BlockStates.LAVA : BlockStates.WATER;
+        
+        this.width = 256;
+        this.length = 256;
+        this.height = 256;
+        this.caveRadius = 1.0f;
         
         this.waterLevel = this.height / 2;
         this.layers = (this.type == IndevType.FLOATING) ? (this.height - 64) / 48 + 1 : 1;

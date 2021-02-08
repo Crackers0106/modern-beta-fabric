@@ -2,7 +2,7 @@ package com.bespectacled.modernbeta.gen.provider;
 
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.gen.GenUtil;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
 import com.bespectacled.modernbeta.noise.PerlinOctaveNoise;
 import com.bespectacled.modernbeta.util.BlockStates;
 
@@ -21,6 +21,7 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 /**
  * 
@@ -38,9 +39,9 @@ public class InfdevChunkProvider extends AbstractChunkProvider {
     
     private final double heightNoise[];
     
-    public InfdevChunkProvider(long seed, OldGeneratorSettings settings) {
+    public InfdevChunkProvider(long seed, ChunkGeneratorSettings generatorSettings, ChunkProviderSettings providerSettings) {
         //super(seed, settings);
-        super(seed, 0, 128, 64, 0, -10, 1, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, settings.providerSettings);
+        super(seed, 0, 128, 64, 0, -10, 1, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, providerSettings);
         
         this.heightNoise = new double[(this.noiseSizeY + 1) * this.noiseSizeX];
         

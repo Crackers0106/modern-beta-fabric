@@ -1,8 +1,11 @@
 package com.bespectacled.modernbeta.gui;
 
+import java.util.function.BiConsumer;
+
 import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.BiomeType;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.InfProviderSettings;
 
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.option.CyclingOption;
@@ -10,18 +13,29 @@ import net.minecraft.text.TranslatableText;
 
 public class InfCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
     
-    private BiomeType biomeType;
-    private boolean generateOceans;
+    protected BiomeType biomeType;
+    protected boolean generateOceans;
     
-    private final boolean showOceansOption;
+    protected final boolean showOceansOption;
     
-    public InfCustomizeLevelScreen(CreateWorldScreen parent, OldGeneratorSettings generatorSettings, String title, BiomeType biomeType, boolean showOceansOption) {
-        super(parent, generatorSettings, title);
+    protected final BiConsumer<BiomeType, ChunkProviderSettings> consumer;
+    
+    public InfCustomizeLevelScreen(
+        CreateWorldScreen parent,
+        String title,
+        ChunkProviderSettings providerSettings,
+        BiomeType biomeType, 
+        boolean showOceansOption,
+        BiConsumer<BiomeType, ChunkProviderSettings> consumer
+    ) {
+        super(parent, title, providerSettings);
+
+        this.biomeType = biomeType;
+        this.generateOceans = ModernBeta.BETA_CONFIG.generateOceans;
         
         this.showOceansOption = showOceansOption;
         
-        this.biomeType = biomeType;
-        this.generateOceans = ModernBeta.BETA_CONFIG.generateOceans;
+        this.consumer = consumer;
     }
     
     @Override
@@ -36,9 +50,8 @@ public class InfCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
                 (gameOptions) -> { return this.biomeType; }, 
                 (gameOptions, option, value) -> {
                     this.biomeType = value;
-                    this.generatorSettings.providerSettings.putString("biomeType", this.biomeType.getName());
                     
-                    return;
+                    this.consumer.accept(this.biomeType, this.providerSettings);
                 })
         );
             
@@ -49,7 +62,9 @@ public class InfCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
                 (gameOptions) -> { return generateOceans; }, 
                 (gameOptions, option, value) -> { // Setter
                     this.generateOceans = value;
-                    this.generatorSettings.providerSettings.putBoolean("generateOceans", this.generateOceans);
+                    ((InfProviderSettings)this.providerSettings).generateOceans = value;
+                    
+                    this.consumer.accept(this.biomeType, this.providerSettings);
             }));
         }
     }

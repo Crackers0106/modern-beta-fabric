@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.gen.GenUtil;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.*;
 import com.bespectacled.modernbeta.noise.PerlinOctaveNoise;
 import com.bespectacled.modernbeta.util.BlockStates;
 
@@ -21,10 +21,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public class InfdevOldChunkProvider extends AbstractChunkProvider {
-    private boolean generateInfdevPyramid = true;
-    private boolean generateInfdevWall = true;
+    private final boolean generateInfdevPyramid;
+    private final boolean generateInfdevWall;
 
     private final PerlinOctaveNoise noiseOctavesA;
     private final PerlinOctaveNoise noiseOctavesB;
@@ -36,9 +37,9 @@ public class InfdevOldChunkProvider extends AbstractChunkProvider {
 
     private final Block blockArr[][][];
     
-    public InfdevOldChunkProvider(long seed, OldGeneratorSettings settings) {
+    public InfdevOldChunkProvider(long seed, ChunkGeneratorSettings generatorSettings, ChunkProviderSettings providerSettings) {
         //super(seed, settings);
-        super(seed, 0, 128, 64, 0, -10, 2, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, settings.providerSettings);
+        super(seed, 0, 128, 64, 0, -10, 2, 1, 1.0, 1.0, 80, 160, BlockStates.STONE, BlockStates.WATER, providerSettings);
         
         this.blockArr = new Block[16][this.worldHeight][16];
         
@@ -56,10 +57,8 @@ public class InfdevOldChunkProvider extends AbstractChunkProvider {
         
         forestNoiseOctaves = new PerlinOctaveNoise(RAND, 8, true);
         
-        if (this.providerSettings.contains("generateInfdevPyramid")) 
-            this.generateInfdevPyramid = this.providerSettings.getBoolean("generateInfdevPyramid");
-        if (this.providerSettings.contains("generateInfdevWall")) 
-            this.generateInfdevWall = this.providerSettings.getBoolean("generateInfdevWall");
+        this.generateInfdevPyramid = ((InfOldProviderSettings)this.providerSettings).generateInfdevPyramid();
+        this.generateInfdevWall = ((InfOldProviderSettings)this.providerSettings).generateInfdevWall();
         
         setForestOctaves(forestNoiseOctaves);
     }

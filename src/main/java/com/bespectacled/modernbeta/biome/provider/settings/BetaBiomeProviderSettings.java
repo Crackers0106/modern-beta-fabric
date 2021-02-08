@@ -1,4 +1,4 @@
-package com.bespectacled.modernbeta.biome.settings;
+package com.bespectacled.modernbeta.biome.provider.settings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +12,8 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
-public class BetaBiomeSettings extends BiomeSettings {
-    public static final Codec<BetaBiomeSettings> CODEC;
+public class BetaBiomeProviderSettings extends BiomeProviderSettings {
+    public static final Codec<BetaBiomeProviderSettings> CODEC;
     
     private final Supplier<Biome> forestBiome;
     private final Supplier<Biome> shrublandBiome;
@@ -29,7 +29,7 @@ public class BetaBiomeSettings extends BiomeSettings {
     
     private final Map<String, Supplier<Biome>> biomeMap;
 
-    public BetaBiomeSettings(
+    public BetaBiomeProviderSettings(
         Supplier<Biome> forestBiome,
         Supplier<Biome> shrublandBiome,
         Supplier<Biome> desertBiome,
@@ -77,12 +77,12 @@ public class BetaBiomeSettings extends BiomeSettings {
     }
     
     @Override
-    public Codec<? extends BiomeSettings> getCodec() {
+    public Codec<? extends BiomeProviderSettings> getCodec() {
         return CODEC;
     }
     
-    public static BetaBiomeSettings createDefaultSettings(Registry<Biome> biomeRegistry) {
-        return new BetaBiomeSettings(
+    public static BetaBiomeProviderSettings createDefaultSettings(Registry<Biome> biomeRegistry) {
+        return new BetaBiomeProviderSettings(
             () -> biomeRegistry.getOrThrow(RegistryKey.of(Registry.BIOME_KEY, BetaBiomes.FOREST_ID)),
             () -> biomeRegistry.getOrThrow(RegistryKey.of(Registry.BIOME_KEY, BetaBiomes.SHRUBLAND_ID)),
             () -> biomeRegistry.getOrThrow(RegistryKey.of(Registry.BIOME_KEY, BetaBiomes.DESERT_ID)),
@@ -110,6 +110,6 @@ public class BetaBiomeSettings extends BiomeSettings {
             Biome.REGISTRY_CODEC.fieldOf("taiga").forGetter(settings -> settings.taigaBiome),
             Biome.REGISTRY_CODEC.fieldOf("tundra").forGetter(settings -> settings.tundraBiome),
             Biome.REGISTRY_CODEC.fieldOf("ice_desert").forGetter(settings -> settings.iceDesertBiome)
-        ).apply(instance, BetaBiomeSettings::new));
+        ).apply(instance, BetaBiomeProviderSettings::new));
     }
 }

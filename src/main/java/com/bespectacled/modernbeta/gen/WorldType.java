@@ -1,18 +1,11 @@
 package com.bespectacled.modernbeta.gen;
 
-import java.util.function.BiFunction;
-
-import com.bespectacled.modernbeta.gen.provider.AbstractChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.AlphaChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.BetaChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.FlatChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.IndevChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.InfdevChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.InfdevOldChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.NetherChunkProvider;
-import com.bespectacled.modernbeta.gen.provider.SkylandsChunkProvider;
+import com.bespectacled.modernbeta.gen.provider.*;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
+import com.bespectacled.modernbeta.util.TriFunction;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 public enum WorldType {
     BETA("beta", BetaChunkProvider::new),
@@ -25,9 +18,9 @@ public enum WorldType {
     NETHER("nether", NetherChunkProvider::new);
     
     private final String name;
-    private final BiFunction<Long, OldGeneratorSettings, AbstractChunkProvider> chunkProvider;
+    private final TriFunction<Long, ChunkGeneratorSettings, ChunkProviderSettings, AbstractChunkProvider> chunkProvider;
     
-    private WorldType(String name, BiFunction<Long, OldGeneratorSettings, AbstractChunkProvider> chunkProvider) {
+    private WorldType(String name, TriFunction<Long, ChunkGeneratorSettings, ChunkProviderSettings, AbstractChunkProvider> chunkProvider) {
         this.name = name;
         this.chunkProvider = chunkProvider;
     }
@@ -36,8 +29,8 @@ public enum WorldType {
         return this.name;
     }
     
-    public AbstractChunkProvider createChunkProvider(long seed, OldGeneratorSettings settings) {
-        return this.chunkProvider.apply(seed, settings);
+    public AbstractChunkProvider createChunkProvider(long seed, ChunkGeneratorSettings generatorSettings, ChunkProviderSettings providerSettings) {
+        return this.chunkProvider.apply(seed, generatorSettings, providerSettings);
     }
     
     public static WorldType fromName(String name) {

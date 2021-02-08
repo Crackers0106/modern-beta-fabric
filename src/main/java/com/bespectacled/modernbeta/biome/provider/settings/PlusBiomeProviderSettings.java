@@ -1,4 +1,4 @@
-package com.bespectacled.modernbeta.biome.settings;
+package com.bespectacled.modernbeta.biome.provider.settings;
 
 import java.util.function.Supplier;
 
@@ -10,13 +10,13 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
-public class PlusBiomeSettings extends BiomeSettings {
-    public static final Codec<PlusBiomeSettings> CODEC;
+public class PlusBiomeProviderSettings extends BiomeProviderSettings {
+    public static final Codec<PlusBiomeProviderSettings> CODEC;
     
     public final Supplier<Biome> temperateBiome;
     public final Supplier<Biome> coldBiome;
     
-    public PlusBiomeSettings(Supplier<Biome> temperateBiome, Supplier<Biome> coldBiome) {
+    public PlusBiomeProviderSettings(Supplier<Biome> temperateBiome, Supplier<Biome> coldBiome) {
         this.temperateBiome = temperateBiome;
         this.coldBiome = coldBiome;
     }
@@ -30,12 +30,12 @@ public class PlusBiomeSettings extends BiomeSettings {
     }
     
     @Override
-    public Codec<? extends BiomeSettings> getCodec() {
+    public Codec<? extends BiomeProviderSettings> getCodec() {
         return CODEC;
     }
     
-    public static PlusBiomeSettings createSettings(Registry<Biome> biomeRegistry, Identifier temperateBiomeId, Identifier coldBiomeId) {
-        return new PlusBiomeSettings(
+    public static PlusBiomeProviderSettings createSettings(Registry<Biome> biomeRegistry, Identifier temperateBiomeId, Identifier coldBiomeId) {
+        return new PlusBiomeProviderSettings(
             () -> biomeRegistry.getOrThrow(RegistryKey.of(Registry.BIOME_KEY, temperateBiomeId)),
             () -> biomeRegistry.getOrThrow(RegistryKey.of(Registry.BIOME_KEY, coldBiomeId))
         );
@@ -45,6 +45,6 @@ public class PlusBiomeSettings extends BiomeSettings {
         CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Biome.REGISTRY_CODEC.fieldOf("temperate_biome").forGetter(settings -> settings.temperateBiome),
             Biome.REGISTRY_CODEC.fieldOf("cold_biome").forGetter(settings -> settings.coldBiome)
-        ).apply(instance, PlusBiomeSettings::new));
+        ).apply(instance, PlusBiomeProviderSettings::new));
     }
 }

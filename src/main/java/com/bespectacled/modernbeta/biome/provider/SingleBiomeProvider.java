@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-import com.bespectacled.modernbeta.biome.settings.BiomeSettings;
-import com.bespectacled.modernbeta.biome.settings.SingleBiomeSettings;
+import com.bespectacled.modernbeta.biome.provider.settings.BiomeProviderSettings;
+import com.bespectacled.modernbeta.biome.provider.settings.SingleBiomeProviderSettings;
 
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -15,8 +14,8 @@ import net.minecraft.world.biome.Biome;
 public class SingleBiomeProvider extends AbstractBiomeProvider {
     private final Supplier<Biome> biome;
     
-    public SingleBiomeProvider(long seed, BiomeSettings settings) {
-        this.biome = ((SingleBiomeSettings)settings).biome;
+    public SingleBiomeProvider(long seed, BiomeProviderSettings settings) {
+        this.biome = ((SingleBiomeProviderSettings)settings).biome;
     }
 
     @Override

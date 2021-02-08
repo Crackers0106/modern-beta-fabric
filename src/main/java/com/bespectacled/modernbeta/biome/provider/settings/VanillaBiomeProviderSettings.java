@@ -1,4 +1,4 @@
-package com.bespectacled.modernbeta.biome.settings;
+package com.bespectacled.modernbeta.biome.provider.settings;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,21 +15,21 @@ import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.Category;
 
-public class VanillaBiomeSettings extends BiomeSettings {
-    public static final Codec<VanillaBiomeSettings> CODEC;
+public class VanillaBiomeProviderSettings extends BiomeProviderSettings {
+    public static final Codec<VanillaBiomeProviderSettings> CODEC;
     
     private final List<Supplier<Biome>> biomes;
     
-    public VanillaBiomeSettings(List<Supplier<Biome>> biomes) {
+    public VanillaBiomeProviderSettings(List<Supplier<Biome>> biomes) {
         this.biomes = biomes;
     }
     
     @Override
-    public Codec<? extends BiomeSettings> getCodec() {
+    public Codec<? extends BiomeProviderSettings> getCodec() {
         return CODEC;
     }
     
-    public static VanillaBiomeSettings createDefaultSettings(Registry<Biome> biomeRegistry) {
+    public static VanillaBiomeProviderSettings createDefaultSettings(Registry<Biome> biomeRegistry) {
         List<Supplier<Biome>> biomes = new ArrayList<Supplier<Biome>>();
         Iterator<Entry<RegistryKey<Biome>, Biome>> biomeIter = BuiltinRegistries.BIOME.getEntries().iterator();
         
@@ -41,7 +41,7 @@ public class VanillaBiomeSettings extends BiomeSettings {
             }
         }
         
-        return new VanillaBiomeSettings(biomes);
+        return new VanillaBiomeProviderSettings(biomes);
     }
     
     private static boolean isValidCategory(Category category) {
@@ -58,6 +58,6 @@ public class VanillaBiomeSettings extends BiomeSettings {
     static {
         CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Biome.REGISTRY_CODEC.listOf().fieldOf("biomes").forGetter(settings -> settings.biomes)
-        ).apply(instance, VanillaBiomeSettings::new));
+        ).apply(instance, VanillaBiomeProviderSettings::new));
     }
 }

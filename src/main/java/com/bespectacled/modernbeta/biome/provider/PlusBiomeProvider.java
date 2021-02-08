@@ -2,14 +2,11 @@ package com.bespectacled.modernbeta.biome.provider;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
-import com.bespectacled.modernbeta.biome.BiomeType;
 import com.bespectacled.modernbeta.biome.beta.BetaClimateSampler;
-import com.bespectacled.modernbeta.biome.settings.*;
+import com.bespectacled.modernbeta.biome.provider.settings.*;
 
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -18,9 +15,9 @@ public class PlusBiomeProvider extends AbstractBiomeProvider {
     private final Supplier<Biome> temperateBiome;
     private final Supplier<Biome> coldBiome;
     
-    public PlusBiomeProvider(long seed, BiomeSettings biomeSettings) {
-        this.temperateBiome = ((PlusBiomeSettings)biomeSettings).temperateBiome;
-        this.coldBiome = ((PlusBiomeSettings)biomeSettings).coldBiome;
+    public PlusBiomeProvider(long seed, BiomeProviderSettings biomeSettings) {
+        this.temperateBiome = ((PlusBiomeProviderSettings)biomeSettings).temperateBiome;
+        this.coldBiome = ((PlusBiomeProviderSettings)biomeSettings).coldBiome;
         
         BetaClimateSampler.INSTANCE.setSeed(seed);
     }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.decorator.OldDecorators;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
 import com.bespectacled.modernbeta.noise.PerlinOctaveNoise;
 import com.bespectacled.modernbeta.util.BlockStates;
 
@@ -12,7 +12,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.structure.JigsawJunction;
 import net.minecraft.structure.StructurePiece;
 import net.minecraft.util.math.BlockPos;
@@ -24,6 +23,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
 /*
  * Some vanilla settings, for reference:
@@ -50,7 +50,7 @@ public abstract class AbstractChunkProvider {
     protected static final Object2ObjectLinkedOpenHashMap<BlockPos, Integer> HEIGHTMAP_CACHE = new Object2ObjectLinkedOpenHashMap<>(512);
     protected static final int[][] HEIGHTMAP_CHUNK = new int[16][16];
     
-    protected final CompoundTag providerSettings;
+    protected final ChunkProviderSettings providerSettings;
     
     protected final int minY;
     protected final int worldHeight;
@@ -76,23 +76,23 @@ public abstract class AbstractChunkProvider {
     protected final BlockState defaultBlock;
     protected final BlockState defaultFluid;
     
-    public AbstractChunkProvider(long seed, OldGeneratorSettings settings) {
+    public AbstractChunkProvider(long seed, ChunkGeneratorSettings generatorSettings, ChunkProviderSettings providerSettings) {
         this(
             seed,
-            settings.generatorSettings.getGenerationShapeConfig().getMinimumY(),
-            settings.generatorSettings.getGenerationShapeConfig().getHeight(),
-            settings.generatorSettings.getSeaLevel(),
-            settings.generatorSettings.getBedrockFloorY(),
-            settings.generatorSettings.getBedrockCeilingY(),
-            settings.generatorSettings.getGenerationShapeConfig().getSizeVertical(),
-            settings.generatorSettings.getGenerationShapeConfig().getSizeHorizontal(),
-            settings.generatorSettings.getGenerationShapeConfig().getSampling().getXZScale(),
-            settings.generatorSettings.getGenerationShapeConfig().getSampling().getYScale(),
-            settings.generatorSettings.getGenerationShapeConfig().getSampling().getXZFactor(),
-            settings.generatorSettings.getGenerationShapeConfig().getSampling().getYFactor(),
-            settings.generatorSettings.getDefaultBlock(),
-            settings.generatorSettings.getDefaultFluid(),
-            settings.providerSettings
+            generatorSettings.getGenerationShapeConfig().getMinimumY(),
+            generatorSettings.getGenerationShapeConfig().getHeight(),
+            generatorSettings.getSeaLevel(),
+            generatorSettings.getBedrockFloorY(),
+            generatorSettings.getBedrockCeilingY(),
+            generatorSettings.getGenerationShapeConfig().getSizeVertical(),
+            generatorSettings.getGenerationShapeConfig().getSizeHorizontal(),
+            generatorSettings.getGenerationShapeConfig().getSampling().getXZScale(),
+            generatorSettings.getGenerationShapeConfig().getSampling().getYScale(),
+            generatorSettings.getGenerationShapeConfig().getSampling().getXZFactor(),
+            generatorSettings.getGenerationShapeConfig().getSampling().getYFactor(),
+            generatorSettings.getDefaultBlock(),
+            generatorSettings.getDefaultFluid(),
+            providerSettings
         );
     }
     
@@ -111,7 +111,7 @@ public abstract class AbstractChunkProvider {
         double yFactor,
         BlockState defaultBlock,
         BlockState defaultFluid,
-        CompoundTag providerSettings
+        ChunkProviderSettings providerSettings
     ) {
         this.minY = minY;
         this.worldHeight = worldHeight;

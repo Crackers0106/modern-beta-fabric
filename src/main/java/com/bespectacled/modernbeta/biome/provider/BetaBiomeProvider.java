@@ -7,9 +7,9 @@ import java.util.function.Supplier;
 
 import com.bespectacled.modernbeta.biome.beta.BetaBiomes;
 import com.bespectacled.modernbeta.biome.beta.BetaClimateSampler;
-import com.bespectacled.modernbeta.biome.settings.BetaBiomeSettings;
-import com.bespectacled.modernbeta.biome.settings.BiomeSettings;
 import com.bespectacled.modernbeta.biome.beta.BetaBiomes.BetaBiomeType;
+import com.bespectacled.modernbeta.biome.provider.settings.BetaBiomeProviderSettings;
+import com.bespectacled.modernbeta.biome.provider.settings.BiomeProviderSettings;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -20,10 +20,10 @@ public class BetaBiomeProvider extends AbstractBiomeProvider {
     private static final double[] TEMP_HUMID_POINT = new double[2];
     private static final Biome BIOME_TABLE[] = new Biome[4096];
     
-    public BetaBiomeProvider(long seed, BiomeSettings biomeSettings) {
+    public BetaBiomeProvider(long seed, BiomeProviderSettings biomeSettings) {
         BetaClimateSampler.INSTANCE.setSeed(seed);
         
-        this.generateBiomeLookup(((BetaBiomeSettings)biomeSettings).getBiomeMap());
+        this.generateBiomeLookup(((BetaBiomeProviderSettings)biomeSettings).getBiomeMap());
     }
 
     @Override

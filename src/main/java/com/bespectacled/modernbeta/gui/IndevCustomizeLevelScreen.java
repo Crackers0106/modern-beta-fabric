@@ -3,7 +3,7 @@ package com.bespectacled.modernbeta.gui;
 import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.indev.IndevUtil.IndevTheme;
 import com.bespectacled.modernbeta.biome.indev.IndevUtil.IndevType;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettings;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
 
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
 import net.minecraft.client.option.CyclingOption;
@@ -21,8 +21,8 @@ public class IndevCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
     
     private float caveRadius;
     
-    public IndevCustomizeLevelScreen(CreateWorldScreen parent, OldGeneratorSettings generatorSettings, String title) {
-        super(parent, generatorSettings, title);
+    public IndevCustomizeLevelScreen(CreateWorldScreen parent, String title, ChunkProviderSettings providerSettings) {
+        super(parent, title, providerSettings);
         
         this.levelType = IndevType.fromName(ModernBeta.BETA_CONFIG.indevLevelType);
         this.levelTheme = IndevTheme.fromName(ModernBeta.BETA_CONFIG.indevLevelTheme);
@@ -38,6 +38,7 @@ public class IndevCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
     protected void init() {
         super.init();
         
+        /*
         this.buttonList.addSingleOptionEntry(
             CyclingOption.create(
                 "createWorld.customize.indev.levelType", 
@@ -148,5 +149,6 @@ public class IndevCustomizeLevelScreen extends AbstractCustomizeLevelScreen {
                     });
                 }
         ));
+        */
     }
 }

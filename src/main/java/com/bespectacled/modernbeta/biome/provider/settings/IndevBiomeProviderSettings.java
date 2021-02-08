@@ -1,4 +1,4 @@
-package com.bespectacled.modernbeta.biome.settings;
+package com.bespectacled.modernbeta.biome.provider.settings;
 
 import java.util.function.Supplier;
 
@@ -7,13 +7,13 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.biome.Biome;
 
-public class IndevBiomeSettings extends BiomeSettings {
-    public static final Codec<IndevBiomeSettings> CODEC;
+public class IndevBiomeProviderSettings extends BiomeProviderSettings {
+    public static final Codec<IndevBiomeProviderSettings> CODEC;
     
     public final Supplier<Biome> mainBiome;
     public final Supplier<Biome> edgeBiome;
     
-    public IndevBiomeSettings(Supplier<Biome> mainBiome, Supplier<Biome> edgeBiome) {
+    public IndevBiomeProviderSettings(Supplier<Biome> mainBiome, Supplier<Biome> edgeBiome) {
         this.mainBiome = mainBiome;
         this.edgeBiome = edgeBiome;
     }
@@ -27,7 +27,7 @@ public class IndevBiomeSettings extends BiomeSettings {
     }
     
     @Override
-    public Codec<? extends BiomeSettings> getCodec() {
+    public Codec<? extends BiomeProviderSettings> getCodec() {
         return CODEC;
     }
     
@@ -35,6 +35,6 @@ public class IndevBiomeSettings extends BiomeSettings {
         CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Biome.REGISTRY_CODEC.fieldOf("main_biome").forGetter(settings -> settings.mainBiome),
             Biome.REGISTRY_CODEC.fieldOf("edge_biome").forGetter(settings -> settings.edgeBiome)
-        ).apply(instance, IndevBiomeSettings::new));
+        ).apply(instance, IndevBiomeProviderSettings::new));
     }
 }

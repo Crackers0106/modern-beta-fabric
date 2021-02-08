@@ -9,6 +9,7 @@ import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.feature.OldFeatures;
 import com.bespectacled.modernbeta.gen.provider.AbstractChunkProvider;
+import com.bespectacled.modernbeta.gen.provider.settings.ChunkProviderSettings;
 import com.bespectacled.modernbeta.mixin.MixinChunkGeneratorInvoker;
 import com.bespectacled.modernbeta.structure.OldStructures;
 import com.bespectacled.modernbeta.util.MutableBiomeArray;
@@ -38,37 +39,50 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.carver.ConfiguredCarver;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.gen.feature.ConfiguredStructureFeatures;
 import net.minecraft.world.gen.feature.StructureFeature;
 
 public class OldChunkGenerator extends NoiseChunkGenerator {
-    
+    /*
     public static final Codec<OldChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(BiomeSource.CODEC.fieldOf("biome_source").forGetter(generator -> generator.biomeSource),
                     Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.worldSeed),
                     OldGeneratorSettings.CODEC.fieldOf("settings").forGetter(generator -> generator.settings))
             .apply(instance, instance.stable(OldChunkGenerator::new)));
+    */
+    public static final Codec<OldChunkGenerator> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+        BiomeSource.CODEC.fieldOf("biome_source").forGetter(generator -> generator.biomeSource),
+        Codec.LONG.fieldOf("seed").stable().forGetter(generator -> generator.worldSeed),
+        Codec.STRING.fieldOf("world_type").stable().forGetter(generator -> generator.worldType),
+        ChunkGeneratorSettings.CODEC.fieldOf("settings").forGetter(generator -> generator.generatorSettings),
+        ChunkProviderSettings.CODEC.fieldOf("chunk_provider_settings").forGetter(generator -> generator.providerSettings)
+    ).apply(instance, instance.stable(OldChunkGenerator::new)));
     
-    private final OldGeneratorSettings settings;
-    private final WorldType worldType;
+    private final String worldType;
     private final boolean generateOceans;
+    
+    private final ChunkGeneratorSettings generatorSettings;
+    private final ChunkProviderSettings providerSettings;
     
     private final OldBiomeSource biomeSource;
     private final AbstractChunkProvider chunkProvider;
     
-    public OldChunkGenerator(BiomeSource biomeSource, long seed, OldGeneratorSettings settings) {
-        super(biomeSource, seed, () -> settings.generatorSettings);
+    public OldChunkGenerator(BiomeSource biomeSource, long seed, String worldType, ChunkGeneratorSettings chunkGeneratorSettings, ChunkProviderSettings chunkProviderSettings) {
+        super(biomeSource, seed, () -> chunkGeneratorSettings);
         
         this.biomeSource = (OldBiomeSource)biomeSource;
-        this.settings = settings;
         
-        this.worldType = WorldType.getWorldType(settings.providerSettings);
-        this.chunkProvider = this.worldType.createChunkProvider(seed, settings);
+        this.worldType = worldType;
+        this.generatorSettings = chunkGeneratorSettings;
+        this.providerSettings = chunkProviderSettings;
         
-        this.generateOceans = settings.providerSettings.contains("generateOceans") ? settings.providerSettings.getBoolean("generateOceans") : false;
+        this.chunkProvider = WorldType.fromName(this.worldType).createChunkProvider(seed, chunkGeneratorSettings, chunkProviderSettings);
+        this.generateOceans = this.providerSettings.generateOceans();
     }
+    
 
     public static void register() {
         Registry.register(Registry.CHUNK_GENERATOR, ModernBeta.createId("old"), CODEC);
@@ -250,11 +264,11 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
     
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new OldChunkGenerator(this.biomeSource.withSeed(seed), seed, this.settings);
+        return new OldChunkGenerator(this.biomeSource.withSeed(seed), seed, this.worldType, this.generatorSettings, this.providerSettings);
     }
     
     public WorldType getWorldType() {
-        return this.worldType;
+        return WorldType.fromName(this.worldType);
     }
     
     public AbstractChunkProvider getChunkProvider() {
