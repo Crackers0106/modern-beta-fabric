@@ -3,6 +3,7 @@ package com.bespectacled.modernbeta.gen;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.BiomeType;
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.biome.beta.BetaBiomes;
@@ -86,11 +87,9 @@ public class OldGeneratorType {
         Registry<DimensionType> registryDimensionType = registryManager.<DimensionType>get(Registry.DIMENSION_TYPE_KEY);
         Registry<ChunkGeneratorSettings> registryChunkGenSettings = registryManager.<ChunkGeneratorSettings>get(Registry.NOISE_SETTINGS_WORLDGEN);
         Registry<Biome> registryBiome = registryManager.<Biome>get(Registry.BIOME_KEY); 
-        Supplier<ChunkGeneratorSettings> chunkGenSettingsSupplier = () -> registryChunkGenSettings.getOrThrow(ChunkGeneratorSettings.OVERWORLD);
+        Supplier<ChunkGeneratorSettings> chunkGenSettingsSupplier = () -> registryChunkGenSettings.get(ModernBeta.createId(worldType.getName()));
         
         OldBiomeSource biomeSource = new OldBiomeSource(generatorOptions.getSeed(), registryBiome, biomeType.getName(), createBiomeSettings(registryBiome, worldType, biomeType));
-        
-        System.out.println("Set generate oceans: " + ((InfProviderSettings)chunkProviderSettings).generateOceans);
         
         return new GeneratorOptions(
             generatorOptions.getSeed(),
@@ -165,7 +164,7 @@ public class OldGeneratorType {
                 OldBiomeSource biomeSource = new OldBiomeSource(seed, biomes, biomeType.getName(), createBiomeSettings(biomes, worldType, biomeType));
                 ChunkGeneratorSettings generatorSettings = generatorSettingsRegistry.getOrThrow(OldGeneratorSettings.INFDEV_OLD);
                 
-                return new OldChunkGenerator(biomeSource, seed, worldType.getName(), generatorSettings, new InfProviderSettings(true));
+                return new OldChunkGenerator(biomeSource, seed, worldType.getName(), generatorSettings, new InfOldProviderSettings(true, true, true));
             }
         };
          

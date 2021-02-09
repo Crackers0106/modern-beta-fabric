@@ -1,10 +1,7 @@
 package com.bespectacled.modernbeta.biome;
 
-import java.util.ArrayList;
-
 import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.provider.AbstractBiomeProvider;
-import com.bespectacled.modernbeta.biome.provider.VanillaBiomeProvider;
 import com.bespectacled.modernbeta.biome.provider.settings.*;
 import com.bespectacled.modernbeta.gen.WorldType;
 import com.mojang.serialization.Codec;
@@ -24,7 +21,7 @@ public class OldBiomeSource extends BiomeSource {
             Codec.LONG.fieldOf("seed").stable().forGetter(biomeSource -> biomeSource.seed),
             RegistryLookupCodec.of(Registry.BIOME_KEY).forGetter(biomeSource -> biomeSource.biomeRegistry),
             Codec.STRING.fieldOf("biome_type").stable().forGetter(biomeSource -> biomeSource.biomeType),
-            BiomeProviderSettings.CODEC.fieldOf("biome_settings").forGetter(biomeSource -> biomeSource.biomeSettings)
+            BiomeProviderSettings.CODEC.fieldOf("biome_provider_settings").forGetter(biomeSource -> biomeSource.biomeSettings)
         ).apply(instance, (instance).stable(OldBiomeSource::new)));
     
     private final long seed;

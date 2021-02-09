@@ -4,7 +4,6 @@ import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.biome.BiomeType;
 import com.bespectacled.modernbeta.biome.OldBiomeSource;
 import com.bespectacled.modernbeta.gen.OldChunkGenerator;
-import com.bespectacled.modernbeta.gen.OldGeneratorSettingsOld;
 import com.bespectacled.modernbeta.gen.WorldType;
 import com.google.common.base.MoreObjects;
 import net.minecraft.nbt.CompoundTag;
@@ -78,7 +77,7 @@ public class MixinGeneratorOptions {
             boolean genOceans = levelType.equals("skylands") ? false : ModernBeta.BETA_CONFIG.generateOceans;
             boolean isIndev = levelType.equals("indev");
             
-            CompoundTag providerSettings = isIndev ? OldGeneratorSettingsOld.createIndevSettings() : OldGeneratorSettingsOld.createInfSettings(worldType, biomeType, genOceans);
+            //CompoundTag providerSettings = isIndev ? OldGeneratorSettingsOld.createIndevSettings() : OldGeneratorSettingsOld.createInfSettings(worldType, biomeType, genOceans);
             
             /*
             OldGeneratorSettings settings = new OldGeneratorSettings(OldGeneratorSettings.getChunkGeneratorSettings(worldType), providerSettings);
