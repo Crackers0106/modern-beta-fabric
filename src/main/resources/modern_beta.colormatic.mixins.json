@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.bespectacled.modernbeta.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [
+    "colormatic.MixinBiomeColormap",
+    "colormatic.MixinBiomeColormapInvoker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

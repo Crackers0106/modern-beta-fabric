@@ -90,6 +90,8 @@ public class ModernBeta implements ModInitializer {
             DebugProviderSettingsCommand.register();
         }
         
+        
+        
         // Serialize various world gen stuff to JSON
         //OldChunkGeneratorSettings.export();
         //OldChunkGenerator.export();

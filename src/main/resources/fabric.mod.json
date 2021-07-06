@@ -26,7 +26,8 @@
     ]
   },
   "mixins": [
-    "modern_beta.mixins.json"
+    "modern_beta.mixins.json",
+    "modern_beta.colormatic.mixins.json"
   ],
   
   "accessWidener": "modern_beta.accesswidener",
