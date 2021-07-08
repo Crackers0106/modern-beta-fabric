@@ -15,7 +15,7 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGeneratorSettings;
 
-public abstract class ChunkProvider {
+public abstract class ChunkProvider implements HeightmapSampler {
     protected final OldChunkGenerator chunkGenerator;
     
     protected final long seed;

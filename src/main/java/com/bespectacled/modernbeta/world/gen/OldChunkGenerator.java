@@ -12,6 +12,7 @@ import com.bespectacled.modernbeta.ModernBeta;
 import com.bespectacled.modernbeta.api.registry.Registries;
 import com.bespectacled.modernbeta.api.world.WorldSettings;
 import com.bespectacled.modernbeta.api.world.gen.ChunkProvider;
+import com.bespectacled.modernbeta.api.world.gen.HeightmapSampler;
 import com.bespectacled.modernbeta.mixin.MixinChunkGeneratorInvoker;
 import com.bespectacled.modernbeta.util.NBTUtil;
 import com.bespectacled.modernbeta.util.BlockStates;
@@ -92,6 +93,9 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
         
         this.generateOceans = NBTUtil.readBoolean("generateOceans", providerSettings, ModernBeta.GEN_CONFIG.generateOceans);
         this.generateOceanShrines = NBTUtil.readBoolean("generateOceanShrines", providerSettings, ModernBeta.GEN_CONFIG.generateOceanShrines);
+        
+        if (this.generateOceans && this.biomeSource instanceof OldBiomeSource oldBiomeSource)
+            oldBiomeSource.setHeightmapSampler(this.chunkProvider);
     }
 
     public static void register() {
@@ -112,20 +116,22 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
         
     @Override
     public void buildSurface(ChunkRegion region, Chunk chunk) {
-        if (!this.chunkProvider.skipChunk(chunk.getPos().x, chunk.getPos().z, ChunkStatus.SURFACE))  
-            if (this.biomeSource instanceof OldBiomeSource oldBiomeSource)
-                this.chunkProvider.provideSurface(region, chunk, oldBiomeSource);
-            else
-                super.buildSurface(region, chunk);
+        if (this.chunkProvider.skipChunk(chunk.getPos().x, chunk.getPos().z, ChunkStatus.SURFACE)) return;
         
-        if (this.generateOceans)
-            this.replaceOceansInChunk(chunk);
+        if (this.biomeSource instanceof OldBiomeSource oldBiomeSource)
+            this.chunkProvider.provideSurface(region, chunk, oldBiomeSource);
+        else
+            super.buildSurface(region, chunk);
+        
+        //if (this.generateOceans)
+            //this.replaceOceansInChunk(chunk);
     }
 
     @Override
     public void generateFeatures(ChunkRegion region, StructureAccessor accessor) {
         if (this.chunkProvider.skipChunk(region.getCenterPos().x, region.getCenterPos().z, ChunkStatus.FEATURES)) return;
         
+        /*
         ChunkPos chunkPos = region.getCenterPos();
         int startX = chunkPos.getStartX();
         int startZ = chunkPos.getStartZ();
@@ -142,7 +148,9 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
             CrashReport report = CrashReport.create(exception, "Biome decoration");
             report.addElement("Generation").add("CenterX", chunkPos.x).add("CenterZ", chunkPos.z).add("Seed", popSeed).add("Biome", biome);
             throw new CrashException(report);
-        }
+        }*/
+        
+        super.generateFeatures(region, accessor);
     }
     
     @Override
@@ -156,7 +164,8 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
         int mainChunkX = chunkPos.x;
         int mainChunkZ = chunkPos.z;
 
-        Biome biome = this.getBiomeAt(chunkPos.getStartX(), 0, chunkPos.getStartZ(), chunk);
+        //Biome biome = this.getBiomeAt(chunkPos.getStartX(), 0, chunkPos.getStartZ(), chunk);
+        Biome biome = this.biomeSource.getBiomeForNoiseGen(chunkPos);
         GenerationSettings genSettings = biome.getGenerationSettings();
         CarverContext heightContext = new CarverContext(this, chunk);
         
@@ -196,6 +205,9 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
     ) {
         if (this.chunkProvider.skipChunk(chunk.getPos().x, chunk.getPos().z, ChunkStatus.STRUCTURE_STARTS)) return;
         
+        super.setStructureStarts(dynamicRegistryManager, structureAccessor, chunk, structureManager, seed);
+        
+        /*
         Biome biome = this.getBiomeAt(chunk.getPos().getStartX(), 0, chunk.getPos().getStartZ(), chunk);
 
         ((MixinChunkGeneratorInvoker)this).invokeSetStructureStart(
@@ -218,7 +230,7 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
                 seed,
                 biome
             );
-        }
+        }*/
     }
     
     @Override
@@ -382,6 +394,7 @@ public class OldChunkGenerator extends NoiseChunkGenerator {
         }
     }
     
+    @SuppressWarnings("unused")
     private Biome getBiomeAt(int x, int y, int z, HeightLimitView world) {
         int seaLevel = this.getSeaLevel();
         
