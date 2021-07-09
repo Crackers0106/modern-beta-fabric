@@ -35,19 +35,12 @@ public class Desert {
         DefaultBiomeFeatures.addDesertLakes(genSettings);
         DefaultBiomeFeatures.addDungeons(genSettings);
         DefaultBiomeFeatures.addDesertFeatures(genSettings);
-        DefaultBiomeFeatures.addFossils(genSettings);
         DefaultBiomeFeatures.addMineables(genSettings);
         DefaultBiomeFeatures.addDefaultOres(genSettings);
         DefaultBiomeFeatures.addDefaultMushrooms(genSettings);
         DefaultBiomeFeatures.addSprings(genSettings);
         
-        genSettings.structureFeature(ConfiguredStructureFeatures.VILLAGE_DESERT);
-        genSettings.structureFeature(ConfiguredStructureFeatures.RUINED_PORTAL_DESERT);
-        genSettings.structureFeature(ConfiguredStructureFeatures.DESERT_PYRAMID);
-        genSettings.structureFeature(ConfiguredStructureFeatures.PILLAGER_OUTPOST);
-        
         genSettings.feature(Feature.UNDERGROUND_ORES, OldConfiguredFeatures.ORE_CLAY);
-        genSettings.feature(Feature.UNDERGROUND_ORES, OldConfiguredFeatures.ORE_EMERALD_Y95);
         
         genSettings.feature(Feature.VEGETAL_DECORATION, OldConfiguredFeatures.PATCH_POPPY);
         
